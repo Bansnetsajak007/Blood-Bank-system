@@ -1,5 +1,5 @@
-981234567	Arjundhara 3 , jhapa	A-
-981234567	birtamode,jhapa	A+
-981234567	birtamode 4 , jhapa	A-
-981234567	Imadol 3 	A-
+9888888 Birtamode-4	Jhapa   B+
+9888888 Lalitpur-4  Lalitpur    B+
+9888888	Arjundhara-3    Jhapa   B+
 
+		

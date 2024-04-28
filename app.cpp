@@ -10,7 +10,7 @@ using namespace std;
 
 void donerRegistration() {
     long int number;
-    string name, address, bloodType;
+    string name, address, bloodType, district;
 
     ofstream outfile("data.txt",ios::app);
 
@@ -20,6 +20,8 @@ void donerRegistration() {
     cin.ignore();
     cout<<"Address: ";
     getline(cin, address);
+    cout<<"District: ";
+    getline(cin, district);
     cout<<"BloodType: ";
     getline(cin, bloodType);
 
@@ -30,39 +32,34 @@ void donerRegistration() {
         return;
     }
 
-    outfile << number << "\t" << address << "\t" << bloodType << std::endl;
+    outfile << number << "\t" << address << "\t" << district << "\t" << bloodType << endl;
 
     outfile.close();
 
 }
 
-void findDonor(const string& address, const string& bloodType) {
-    // Open the file for reading
+void findDonor(const string& district, const string& bloodType) {
     ifstream infile("data.txt");
     
-    // Check if the file opened successfully
     if (!infile.is_open()) {
         cerr << "Error opening file!" << endl;
         return;
     }
 
-    // Variables to store data read from the file
     string line;
-    string donorAddress;
+    string donorDisctict;
     string donorBloodType;
     bool found = false;
 
-    // Read each line from the file
     while (getline(infile, line)) {
         // Extract address and blood type from the line
         size_t pos1 = line.find('\t');
         size_t pos2 = line.find('\t', pos1 + 1);
 
-        donorAddress = line.substr(pos1 + 1, pos2 - pos1 - 1);
+        donorDisctict = line.substr(pos1 + 1, pos2 - pos1 - 1);
         donorBloodType = line.substr(pos2 + 1);
 
-        // Check if the address and blood type match the criteria
-        if (donorAddress == address && donorBloodType == bloodType) {
+        if (donorDisctict == district && donorBloodType == bloodType) {
             // Print the donor details
             cout << "Donor found:" << endl;
             cout << line << endl;
@@ -85,13 +82,17 @@ void deleteDoner() {
 
 int main() {
     int choice;
-    string searchAddress, searchBloodType;
+    string searchDistrict, searchBloodType;
+
+    while(1) {
+
     cout<<"Blood Bank Management System"<<endl;
     cout<<"1) Be a Blood Donor"<<endl;
-    cout<<"1) Find a Blood Donor"<<endl;
-    cout<<"1) Delete a Blood Donor"<<endl;
+    cout<<"2) Find a Blood Donor"<<endl;
+    cout<<"3) Delete a Blood Donor"<<endl;
     cout<<"Enter your Choice: ";
     cin>>choice;
+
 
     switch (choice) {
     {
@@ -101,19 +102,20 @@ int main() {
 
     case 2:
         cin.ignore();
-        cout<<"Search Address: ";
-        getline(cin, searchAddress);
+        cout<<"Search District: ";
+        getline(cin, searchDistrict);
         cout<<"Search BloodType: ";
-        getline(cin, searchAddress);
-        findDonor(searchAddress, searchBloodType);
+        getline(cin, searchBloodType);
+        findDonor(searchDistrict, searchBloodType);
         break;
 
     case 3:
         deleteDoner();
         break;
     default:
-        break;
+        cout<<"Invalid Choice Please Enter Again\n";
+    }
     }
     return 0;
-}
+    }
 }
