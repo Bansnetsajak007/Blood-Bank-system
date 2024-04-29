@@ -1,4 +1,2 @@
-Jhapa	9888888	Birtamode	B+
-	
-Jhapa	98111111	Birtamode	B+
-bagmati	98888888	Ktm	O+
+Jhapa	98222222	Birtamode	O-
+Jhapa	98073833	Arjundhara	B+

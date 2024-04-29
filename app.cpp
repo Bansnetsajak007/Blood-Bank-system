@@ -1,4 +1,5 @@
-//refactoring search code
+//refactoring search code still more to refactor
+// also implementing the delete fucntion
 
 #include<iostream>
 #include<string>
@@ -32,6 +33,7 @@ void donerRegistration() {
         return;
     }
 
+    // outfile <<"District" << "\t" << "Number" << "\t" << "Address" << "\t" <<"BloodType"<<endl;
     outfile << district << "\t" << number << "\t" << address << "\t" << bloodType << endl;
 
     outfile.close();
@@ -93,6 +95,7 @@ int main() {
     cout <<"| 1) Be a Blood Donor        |" << endl;
     cout <<"| 2) Find a Blood Donor      |" << endl;
     cout <<"| 3) Delete a Blood Donor    |" << endl;
+    cout <<"| 4) Exit                    |" << endl;
     cout <<"+----------------------------+" << endl;
     cout <<"Enter your Choice: ";
     cin >> choice;
@@ -116,10 +119,13 @@ int main() {
     case 3:
         deleteDoner();
         break;
+    case 4:
+        exit(0);
+        break;
     default:
         cout<<"Invalid Choice Please Enter Again\n";
     }
     }
-    return 0;
     }
+    return 0;
 }
