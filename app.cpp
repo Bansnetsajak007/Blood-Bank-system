@@ -32,7 +32,7 @@ void donerRegistration() {
         return;
     }
 
-    outfile << number << "\t" << address << "\t" << district << "\t" << bloodType << endl;
+    outfile << district << "\t" << number << "\t" << address << "\t" << bloodType << endl;
 
     outfile.close();
 
@@ -86,12 +86,16 @@ int main() {
 
     while(1) {
 
-    cout<<"Blood Bank Management System"<<endl;
-    cout<<"1) Be a Blood Donor"<<endl;
-    cout<<"2) Find a Blood Donor"<<endl;
-    cout<<"3) Delete a Blood Donor"<<endl;
-    cout<<"Enter your Choice: ";
-    cin>>choice;
+   cout << "+---------------------------+" << endl;
+    cout <<"|   BLOOD BANK MANAGEMENT    |" << endl;
+    cout <<"|        SYSTEM              |" << endl;
+    cout <<"+----------------------------+" << endl;
+    cout <<"| 1) Be a Blood Donor        |" << endl;
+    cout <<"| 2) Find a Blood Donor      |" << endl;
+    cout <<"| 3) Delete a Blood Donor    |" << endl;
+    cout <<"+----------------------------+" << endl;
+    cout <<"Enter your Choice: ";
+    cin >> choice;
 
 
     switch (choice) {

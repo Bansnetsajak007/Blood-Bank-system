@@ -1,5 +1,4 @@
-9888888 Birtamode-4	Jhapa   B+
-9888888 Lalitpur-4  Lalitpur    B+
-9888888	Arjundhara-3    Jhapa   B+
-
-		
+Jhapa	9888888	Birtamode	B+
+	
+Jhapa	98111111	Birtamode	B+
+bagmati	98888888	Ktm	O+
