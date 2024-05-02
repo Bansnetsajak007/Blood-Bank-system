@@ -18,7 +18,7 @@ class Donor {
 
     public:
         void donorDetails() const {
-            //will see this
+            //will implement this function
         }
 };
 
