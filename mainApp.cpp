@@ -14,11 +14,16 @@ using namespace std;
 class Donor {
     public:
         long int number;
+        int donorId;
         string name,address, bloodType , district;
 
     public:
         void donorDetails() const {
             //will implement this function
+            cout << "donorDetails" << endl;
+            cout << "Donor Name: " << name << endl;
+            cout << "Donor District: " << district << endl;
+            cout << "Donor Blood Type: " << bloodType << endl;
         }
 };
 
@@ -31,7 +36,10 @@ class BloodDatabase {
         void getDonorDetails() {
             cout<<"Enter your Details\n";
 
-            for(int i = 0 ; i < 2; ++i) {
+            for(int i = 0 ; i < 3; ++i) {
+                cout<<"Id: ";
+                cin >>donors[i].donorId;
+                cout<<"\n";
                 cout<<"Name: ";
                 cin >>donors[i].name;
                 cout<<"\n";
@@ -60,9 +68,51 @@ class BloodDatabase {
             return;
         }
 
-        Donor donor[SIZE];
-        bool flag = false;
+        outfile.write(reinterpret_cast<const char*>(donors), sizeof(donors));
+        outfile.close();
 
     }
+
+    void searchAndDisplay(int idToSearch) const {
+        ifstream inFile(fileName, ios::binary);
+
+        if (!inFile) {
+            cout << "Error opening file for reading." << endl;
+            return;
+        }
+
+        Donor donor;
+        bool found = false;
+
+        while (inFile.read(reinterpret_cast<char*>(&donor), sizeof(Donor))){
+            if (donor.donorId == idToSearch) {
+                found = true;
+                donor.donorDetails();
+                break;
+            }
+        }
+
+        if (!found) {
+            cout << "Donor with ID" << idToSearch << " not found." <<endl;
+        }
+        inFile.close();
+    }
 };
+
+
+int main() {
+    BloodDatabase database;
+
+    database.getDonorDetails();
+    database.writeDataToFile();
+
+    int idToSearch;
+
+    cout<< "Enter ID to search: "<<endl;
+    cin >> idToSearch;
+
+    database.searchAndDisplay(idToSearch);
+
+    return 0;
+}
 
