@@ -101,7 +101,7 @@ int main() {
     cin >> choice;
 
 
-    switch (choice) {
+    switch (choice) 
     {
     case 1:
         donerRegistration();
@@ -121,10 +121,9 @@ int main() {
         break;
     case 4:
         exit(0);
-        break;
+        // break;
     default:
         cout<<"Invalid Choice Please Enter Again\n";
-    }
     }
     }
     return 0;

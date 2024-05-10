@@ -1,11 +1,12 @@
 //completed register donor
-// search donor (will implement)
+// search donor (done) (still more filter function to implement)
 //delete door (will implement)
 
 #include<iostream>
 #include<fstream>
 #include<string>
 #include<vector>
+#include<sstream>
 
 using namespace std;
 
@@ -21,6 +22,13 @@ public:
         cout << "Donor District: " << district << endl;
         cout << "Donor Blood Type: " << bloodType << endl;
     }
+
+        Donor parseLine(const string& line) {
+    Donor d;
+    stringstream ss(line);
+    ss >> d.name >> d.address >> d.district >> d.bloodType >> d.number;
+    return d;
+}
 };
 
 class BloodDatabase {
@@ -28,7 +36,16 @@ private:
     const string fileName = "data.txt";
     vector<Donor> donors;
 
+//     Donor parseLine(const string& line) {
+//     Donor d;
+//     stringstream ss(line);
+//     ss >> d.name >> d.address >> d.district >> d.bloodType >> d.number;
+//     return d;
+// }
+
 public:
+    
+
     void getDonorDetails() {
         cout << "Enter donor details\n";
 
@@ -67,19 +84,20 @@ public:
         }
 
         Donor newDonor = donors.back(); // Get the last donor added
-        // outfile << "Id: " << newDonor.donorId << endl;
-        // outfile << "Name: " << newDonor.name << endl;
-        // outfile << "Address: " << newDonor.address << endl;
-        // outfile << "District: " << newDonor.district << endl;
-        // outfile << "Blood Type: " << newDonor.bloodType << endl;
-        // outfile << "Number: " << newDonor.number << endl;
-        // outfile << endl;
-        outfile << newDonor.name <<"\t" << newDonor.address <<"\t" << newDonor.district <<"\t" << newDonor.bloodType <<"\t" << newDonor.number << "," <<endl;
+        outfile << endl;
+        outfile << newDonor.name <<"    " << newDonor.address <<"    " << newDonor.district <<"    " << newDonor.bloodType <<"    " << newDonor.number << "," <<endl;
 
         outfile.close();
     }
 
-    void searchAndDisplay(int idToSearch) const {
+
+
+    void searchAndDisplay() const {
+
+        int provienceName;
+        cout<< "Enter the name of the province: ";
+        cin >> provienceName;
+
         ifstream inFile(fileName);
 
         if (!inFile) {
@@ -87,23 +105,35 @@ public:
             return;
         }
 
-        Donor donor;
+        vector<Donor> donor;
+        Donor temp;
+        string line;
         bool found = false;
 
-        while (inFile >> donor.donorId >> donor.name >> donor.address >> donor.district >> donor.bloodType >> donor.number) {
-            if (donor.donorId == idToSearch) {
-                found = true;
-                donor.donorDetails();
-                break;
+        while (getline(inFile, line)) {
+            Donor d = temp.parseLine(line); 
+            // cout << d.district << endl; 
+            if(d.district == provienceName) {
+                donor.push_back(d);
             }
         }
 
-        if (!found) {
-            cout << "Donor with ID " << idToSearch << " not found." << endl;
+        if(donor.empty()) {
+        cout << "No people found from " << provienceName << endl;
+        } else {
+        cout << "People from " << provienceName << ":" << endl;
+        for (const auto& d : donor) {
+            cout << "Name: " << d.name << endl;
+            cout << "Address: " << d.address << endl;
+            cout << "Province: " << d.district << endl;
+            cout << "Blood Type: " << d.bloodType << endl;
+            cout << "Mobile Number: " << d.number << endl;
+            cout << endl;
         }
 
         inFile.close();
     }
+}
 
     void deleteDonor(int idToDelete) {
         ifstream inFile(fileName);
@@ -143,12 +173,20 @@ public:
     }
 };
 
+//function to parse a line and extract donor details
+// Donor parseLine(const string& line) {
+//     Donor d;
+//     stringstream ss(line);
+//     ss >> d.name >> d.address >> d.district >> d.bloodType >> d.number;
+//     return d;
+// }
 
 int main() {
     BloodDatabase database;
-
     int choice;
-    cout << "1. Register Donor\n2. Find Donor\n3. Delete Donor\nEnter your choice: ";
+
+while (1) {
+    cout << "1. Register Donor\n2. Find Donor\n3. Delete Donor\n4. Exit\nEnter your choice: ";
     cin >> choice;
 
     switch (choice) {
@@ -157,11 +195,7 @@ int main() {
         database.writeDataToFile();
         break;
     case 2:
-        //bad coding pratice (Will fixx this soonn)
-        int idToSearch;
-        cout << "Enter ID to search: ";
-        cin >> idToSearch;
-        database.searchAndDisplay(idToSearch);
+        database.searchAndDisplay();
         break;
     case 3:
         int idToDelete;
@@ -169,10 +203,11 @@ int main() {
         cin >> idToDelete;
         database.deleteDonor(idToDelete);
         break;
+    case 4:
+        exit(1);
     default:
-        cout << "Invalid choice." << endl;
-        break;
+        cout << "Invalid choice\n";
     }
-
+}
     return 0;
 }
