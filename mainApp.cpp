@@ -1,3 +1,7 @@
+//completed register donor
+// search donor (will implement)
+//delete door (will implement)
+
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -43,7 +47,7 @@ public:
         cout << "Provience: ";
         cin >> newDonor.district;
         cout << "\n";
-
+        cin.ignore();
         cout << "Blood Type: ";
         getline(cin, newDonor.bloodType);
         cout << "\n";
@@ -63,13 +67,14 @@ public:
         }
 
         Donor newDonor = donors.back(); // Get the last donor added
-        outfile << "Id: " << newDonor.donorId << endl;
-        outfile << "Name: " << newDonor.name << endl;
-        outfile << "Address: " << newDonor.address << endl;
-        outfile << "District: " << newDonor.district << endl;
-        outfile << "Blood Type: " << newDonor.bloodType << endl;
-        outfile << "Number: " << newDonor.number << endl;
-        outfile << endl; // Add a blank line between donors for readability
+        // outfile << "Id: " << newDonor.donorId << endl;
+        // outfile << "Name: " << newDonor.name << endl;
+        // outfile << "Address: " << newDonor.address << endl;
+        // outfile << "District: " << newDonor.district << endl;
+        // outfile << "Blood Type: " << newDonor.bloodType << endl;
+        // outfile << "Number: " << newDonor.number << endl;
+        // outfile << endl;
+        outfile << newDonor.name <<"\t" << newDonor.address <<"\t" << newDonor.district <<"\t" << newDonor.bloodType <<"\t" << newDonor.number << "," <<endl;
 
         outfile.close();
     }
@@ -152,6 +157,7 @@ int main() {
         database.writeDataToFile();
         break;
     case 2:
+        //bad coding pratice (Will fixx this soonn)
         int idToSearch;
         cout << "Enter ID to search: ";
         cin >> idToSearch;
