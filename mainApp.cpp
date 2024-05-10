@@ -8,8 +8,8 @@ using namespace std;
 class Donor {
 public:
     long int number;
-    int donorId;
-    string name, address, bloodType, district;
+    int donorId,district;
+    string name, address, bloodType;
 
 public:
     void donorDetails() const {
@@ -40,8 +40,8 @@ public:
         getline(cin, newDonor.address);
         cout << "\n";
 
-        cout << "District: ";
-        getline(cin, newDonor.district);
+        cout << "Provience: ";
+        cin >> newDonor.district;
         cout << "\n";
 
         cout << "Blood Type: ";

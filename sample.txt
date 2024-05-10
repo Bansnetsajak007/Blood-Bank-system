@@ -1,0 +1,5 @@
+Tom    Birtamode,JanataTole    1    B+    90000202020,
+Rakesh    Birtamode,JanataTole    1    A+    90000202020,
+sandesh    Arjundhara,JanataTole    2    O+    90000202020,
+Lalita    Damak,BuddhaTole         2    B+    90000202020,
+Shyam    Ktm,ABCTole        4    A+    90000202020,
