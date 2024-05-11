@@ -186,6 +186,13 @@ int main() {
     int choice;
 
 while (1) {
+        cout << 
+    "  ____  _                 _   ____              _      \n"
+    " | __ )| | ___   ___   __| | | __ )  __ _ _ __ | | __  \n"
+    " |  _ \\| |/ _ \\ / _ \\ / _` | |  _ \\ / _` | '_ \\| |/ /  \n"
+    " | |_) | | (_) | (_) | (_| | | |_) | (_| | | | |   <   \n"
+    " |____/|_|\\___/ \\___/ \\__,_| |____/ \\__,_|_| |_|_|\\_\\  \n" 
+    "                                                      \n\n";
     cout << "1. Register Donor\n2. Find Donor\n3. Delete Donor\n4. Exit\nEnter your choice: ";
     cin >> choice;
 
