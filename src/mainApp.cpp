@@ -36,13 +36,6 @@ private:
     const string fileName = "data.txt";
     vector<Donor> donors;
 
-//     Donor parseLine(const string& line) {
-//     Donor d;
-//     stringstream ss(line);
-//     ss >> d.name >> d.address >> d.district >> d.bloodType >> d.number;
-//     return d;
-// }
-
 public:
     
 
@@ -106,7 +99,7 @@ public:
         }
 
         vector<Donor> donor;
-        Donor temp;
+        Donor temp;  //temporary object
         string line;
         bool found = false;
 
@@ -136,40 +129,54 @@ public:
 }
 
     void deleteDonor(int idToDelete) {
+        char sureChoice;
         ifstream inFile(fileName);
-        ofstream tempFile("temp.txt");
 
-        if (!inFile || !tempFile) {
-            cout << "Error opening files for reading/writing." << endl;
+        string donorName;
+        cout << "Enter Name of Donor: ";
+        getline(cin, donorName);
+        
+        if (!inFile) {
+            cout << "Error opening file" << endl;
             return;
         }
 
-        Donor donor;
-        bool found = false;
+        vector<Donor> donor;
+        Donor temp;  //temporary object
+        string line;
 
-        while (inFile >> donor.donorId >> donor.name >> donor.address >> donor.district >> donor.bloodType >> donor.number) {
-            if (donor.donorId == idToDelete) {
-                found = true;
-                continue; // Don't write this donor to the temp file, effectively deleting it
+        while (getline(inFile, line)) {
+            Donor d = temp.parseLine(line); 
+            // cout << d.district << endl; 
+            if(d.name == donorName) {
+                donor.push_back(d);
             }
-            tempFile << "Id: " << donor.donorId << endl;
-            tempFile << "Name: " << donor.name << endl;
-            tempFile << "Address: " << donor.address << endl;
-            tempFile << "District: " << donor.district << endl;
-            tempFile << "Blood Type: " << donor.bloodType << endl;
-            tempFile << "Number: " << donor.number << endl;
-            tempFile << endl;
+        }
+
+        if(donor.empty()) {
+        cout << "No people found with Name " << donorName << endl;
+        } else {
+        cout << "List of people having  " << donorName << "Name :" << endl;
+        for (const auto& d : donor) {
+            cout << "Name: " << d.name << endl;
+            cout << "Address: " << d.address << endl;
+            // cout << "Province: " << d.district << endl;
+            cout << "Blood Type: " << d.bloodType << endl;
+            cout << "Mobile Number: " << d.number << endl;
+            cout << endl;
+        }
+
+        cout << "Are you sure you want to delete donor? [y/n]: ";
+        cin>> sureChoice;
+
+        if(sureChoice == 'y' || sureChoice == 'Y') {
+            //logic to delete data 
         }
 
         inFile.close();
-        tempFile.close();
+        
 
-        remove(fileName.c_str());         // Delete the original file
-        rename("temp.txt", fileName.c_str()); // Rename temp file to original name
-        if (found)
-            cout << "Donor with ID " << idToDelete << " deleted successfully." << endl;
-        else
-            cout << "Donor with ID " << idToDelete << " not found." << endl;
+    }
     }
 };
 
