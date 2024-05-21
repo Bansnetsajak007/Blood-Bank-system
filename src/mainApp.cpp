@@ -77,7 +77,6 @@ public:
         }
 
         Donor newDonor = donors.back(); // Get the last donor added
-        outfile << endl;
         outfile << newDonor.name <<"    " << newDonor.address <<"    " << newDonor.district <<"    " << newDonor.bloodType <<"    " << newDonor.number << "," <<endl;
 
         outfile.close();
@@ -128,67 +127,115 @@ public:
     }
 }
 
-    void deleteDonor(int idToDelete) {
-        char sureChoice;
-        ifstream inFile(fileName);
-
-        string donorName;
-        cout << "Enter Name of Donor: ";
-        getline(cin, donorName);
+    // void deleteDonor() {
+    //     ifstream inFile(fileName);
+    //     string donorName;
+    //     cout << "Enter Name of Donor: ";
+    //     getline(cin, donorName);
         
-        if (!inFile) {
-            cout << "Error opening file" << endl;
-            return;
-        }
+    //     if (!inFile) {
+    //         cout << "Error opening file" << endl;
+    //         return;
+    //     }
 
-        vector<Donor> donor;
-        Donor temp;  //temporary object
-        string line;
+    //     vector<Donor> donor;
+    //     Donor temp;  //temporary object
+    //     string line;
 
-        while (getline(inFile, line)) {
-            Donor d = temp.parseLine(line); 
-            // cout << d.district << endl; 
-            if(d.name == donorName) {
-                donor.push_back(d);
-            }
-        }
+    //     while (getline(inFile, line)) {
+    //         Donor d = temp.parseLine(line); 
+    //         // cout << d.district << endl; 
+    //         if(d.name == donorName) {
+    //             donor.push_back(d);
+    //         }
+    //     }
 
-        if(donor.empty()) {
-        cout << "No people found with Name " << donorName << endl;
-        } else {
-        cout << "List of people having  " << donorName << "Name :" << endl;
-        for (const auto& d : donor) {
+    //     if(donor.empty()) {
+    //     cout << "No people found with Name " << donorName << endl;
+    //     } else {
+    //     cout << "List of people having  " << donorName << "Name :" << endl;
+    //     for (const auto& d : donor) {
+    //         cout << "Name: " << d.name << endl;
+    //         cout << "Address: " << d.address << endl;
+    //         // cout << "Province: " << d.district << endl;
+    //         cout << "Blood Type: " << d.bloodType << endl;
+    //         cout << "Mobile Number: " << d.number << endl;
+    //         cout << endl;
+    //     }
+
+    //     cout << "Are you sure you want to delete donor? [y/n]: ";
+    //     char sureChoice;
+
+    //     cin>> sureChoice;
+
+    //     if(sureChoice == 'y' || sureChoice == 'Y') {
+    //         //logic to delete data 
+    //     }
+
+    //     inFile.close();
+        
+
+    // }
+    // }
+
+    void deleteDonor(string donorName) {
+    ifstream inFile(fileName);
+    ofstream tempFile("temp.txt"); // Temporary file to store non-deleted donors
+
+    if (!inFile) {
+        cout << "Error opening file" << endl;
+        return;
+    }
+
+    Donor temp;  //temporary object
+    string line;
+    bool found = false; // Flag to check if the donor is found
+
+    while (getline(inFile, line)) {
+        Donor d = temp.parseLine(line); 
+        if(d.name == donorName) {
+            found = true; // Set found flag to true
             cout << "Name: " << d.name << endl;
             cout << "Address: " << d.address << endl;
-            // cout << "Province: " << d.district << endl;
             cout << "Blood Type: " << d.bloodType << endl;
             cout << "Mobile Number: " << d.number << endl;
             cout << endl;
+            cout << "Are you sure you want to delete donor? [y/n]: ";
+            char sureChoice;
+            cin >> sureChoice;
+
+            if(sureChoice == 'y' || sureChoice == 'Y') {
+                // Do not write the donor data to the temporary file
+                continue;
+            } else {
+                // Write the donor data to the temporary file
+                tempFile << line << endl;
+            }
+        } else {
+            // Write non-matching donor data to the temporary file
+            tempFile << line << endl;
         }
-
-        cout << "Are you sure you want to delete donor? [y/n]: ";
-        cin>> sureChoice;
-
-        if(sureChoice == 'y' || sureChoice == 'Y') {
-            //logic to delete data 
-        }
-
-        inFile.close();
-        
-
     }
+
+    inFile.close();
+    tempFile.close();
+
+    // Remove the original file
+    remove(fileName.c_str());
+
+    // Rename the temporary file to the original file name
+    rename("temp.txt", fileName.c_str());
+
+    if (!found) {
+        cout << "No donor found with the name " << donorName << endl;
     }
+}
+
 };
 
-//function to parse a line and extract donor details
-// Donor parseLine(const string& line) {
-//     Donor d;
-//     stringstream ss(line);
-//     ss >> d.name >> d.address >> d.district >> d.bloodType >> d.number;
-//     return d;
-// }
 
 int main() {
+    string donorName;
     BloodDatabase database;
     int choice;
 
@@ -212,10 +259,9 @@ while (1) {
         database.searchAndDisplay();
         break;
     case 3:
-        int idToDelete;
-        cout << "Enter ID to delete: ";
-        cin >> idToDelete;
-        database.deleteDonor(idToDelete);
+        cout << "Enter the Name of Donor: ";
+        getline(cin, donorName);
+        database.deleteDonor(donorName);
         break;
     case 4:
         exit(1);
