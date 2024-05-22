@@ -1,3 +1,8 @@
+//completed register donor
+// search donor (done) (still more filter function to implement)
+//delete door (will implement)
+// implement effective error handiling
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -63,14 +68,14 @@ public:
     }
 
     void writeDataToFile() {
-        ofstream outfile(fileName, ios::app); // Open in append mode to add new donors to the end of the file
+        ofstream outfile(fileName, ios::app); 
 
         if (!outfile) {
             cout << "Error opening file for writing." << endl;
             return;
         }
 
-        Donor newDonor = donors.back(); // Get the last donor added
+        Donor newDonor = donors.back(); 
         outfile << newDonor.name << "    " << newDonor.address << "    " << newDonor.district << "    " << newDonor.bloodType << "    " << newDonor.number << "," << endl;
 
         outfile.close();
@@ -149,24 +154,21 @@ public:
                 cin >> sureChoice;
 
                 if (sureChoice == 'y' || sureChoice == 'Y') {
-                    // Do not write the donor data to the temporary file
                     continue;
                 }
             }
-            // Write the donor data to the temporary file if not deleting
+
             tempFile << line << endl;
         }
 
         inFile.close();
         tempFile.close();
 
-        // Remove the original file
         if (remove(fileName.c_str()) != 0) {
             cerr << "Error removing original file" << endl;
             return;
         }
 
-        // Rename the temporary file to the original file name
         if (rename("temp.txt", fileName.c_str()) != 0) {
             cerr << "Error renaming temporary file" << endl;
             return;
