@@ -127,6 +127,14 @@ public:
         clearConsole();
         displayProvinces();
         int provinceName = getValidatedInput("Enter the province number: ");
+        
+        cout << "Enter address (leave blank to skip): ";
+        string addressFilter;
+        getline(cin, addressFilter);
+
+        cout << "Enter blood type (leave blank to skip): ";
+        string bloodTypeFilter;
+        getline(cin, bloodTypeFilter);
 
         ifstream inFile(fileName);
 
@@ -141,16 +149,34 @@ public:
 
         while (getline(inFile, line)) {
             Donor d = Donor::parseLine(line);
-            if (d.district == provinceName) {
+            bool match = d.district == provinceName &&
+                (addressFilter.empty() || d.address.find(addressFilter) != string::npos) &&
+                (bloodTypeFilter.empty() || d.bloodType == bloodTypeFilter);
+
+            if (match) {
                 donors.push_back(d);
                 found = true;
             }
         }
 
         if (!found) {
-            cout << "No people found from province " << provinceName << endl;
+            cout << "No people found from province " << provinceName;
+            if (!addressFilter.empty()) {
+                cout << " with address containing '" << addressFilter << "'";
+            }
+            if (!bloodTypeFilter.empty()) {
+                cout << " and blood type '" << bloodTypeFilter << "'";
+            }
+            cout << "." << endl;
         } else {
-            cout << "People from province " << provinceName << ":" << endl;
+            cout << "People from province " << provinceName;
+            if (!addressFilter.empty()) {
+                cout << " with address containing '" << addressFilter << "'";
+            }
+            if (!bloodTypeFilter.empty()) {
+                cout << " and blood type '" << bloodTypeFilter << "'";
+            }
+            cout << ":" << endl;
             for (const auto& d : donors) {
                 cout << "Name: " << d.name << endl;
                 cout << "Address: " << d.address << endl;
@@ -201,7 +227,7 @@ public:
                 }
             }
 
-            tempFile << d.donorId << "," << d.name << "," << d.address << "," << d.district << "," << d.bloodType << "," << d.number << endl;
+            tempFile << d.donorId << "  ,  " << d.name << "  ,  " << d.address << "  ,  " << d.district << "  ,  " << d.bloodType << "  ,  " << d.number << endl;
         }
 
         inFile.close();

@@ -1,0 +1,8 @@
+1,kamal kami,ilam,1,O+ve,98776655
+9,kewal das,jhapa,2,A+VE,99873324
+6,sandip negi,rolpa,5,O+ve,98776655
+8,raman degi,pachthar,6,A+VE,998733241
+11,loda doom,morang,3,A+VE,998733241
+91,chut lal,aus,4,A+VE,99873324
+1,kamal kami,ilam,1,O-ve,987766501
+22,kapil kami,jhapa,1,O-ve,9877667
