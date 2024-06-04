@@ -1,33 +1,38 @@
-//completed register donor
-// search donor (done) (still more filter function to implement)
-//delete door (will implement)
-// implement effective error handiling
-
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <sstream>
+#include <limits>
+#include <stdexcept>
+#include <cctype>
+#include <algorithm>
 
 using namespace std;
 
 class Donor {
 public:
-    long int number;
-    int donorId, district;
+    int donorId, district, number;
     string name, address, bloodType;
 
-public:
     void donorDetails() const {
         cout << "Donor Name: " << name << endl;
         cout << "Donor District: " << district << endl;
         cout << "Donor Blood Type: " << bloodType << endl;
     }
 
-    Donor parseLine(const string& line) {
+    static Donor parseLine(const string& line) {
         Donor d;
         stringstream ss(line);
-        ss >> d.name >> d.address >> d.district >> d.bloodType >> d.number;
+        string token;
+
+        getline(ss, token, ','); d.donorId = stoi(token);
+        getline(ss, token, ','); d.name = token;
+        getline(ss, token, ','); d.address = token;
+        getline(ss, token, ','); d.district = stoi(token);
+        getline(ss, token, ','); d.bloodType = token;
+        getline(ss, token, ','); d.number = stoi(token);
+
         return d;
     }
 };
@@ -37,54 +42,91 @@ private:
     const string fileName = "data.txt";
     vector<Donor> donors;
 
+    static void displayProvinces() {
+        cout << "Choose the province:\n";
+        cout << "1. Koshi\n";
+        cout << "2. Madhesh\n";
+        cout << "3. Bagmati\n";
+        cout << "4. Gandaki\n";
+        cout << "5. Lumbini\n";
+        cout << "6. Karnali\n";
+        cout << "7. Sudurpashchim\n";
+    }
+
 public:
+    static void clearConsole() {
+#ifdef _WIN32
+        system("cls");
+#else
+        system("clear");
+#endif
+    }
+
+    static void waitForKeyPress() {
+        cout << "Press any key to continue...";
+        cin.ignore();
+        cin.get();
+    }
+
+    static int getValidatedInput(const string& prompt) {
+        int value;
+        string input;
+        while (true) {
+            cout << prompt;
+            getline(cin, input);
+            try {
+                if (!all_of(input.begin(), input.end(), ::isdigit)) {
+                    throw invalid_argument("Input contains non-numeric characters");
+                }
+                value = stoi(input);
+                break; // if conversion is successful, exit loop
+            } catch (const invalid_argument& e) {
+                cout << "Invalid input: " << e.what() << ". Please enter a valid number." << endl;
+            } catch (const out_of_range&) {
+                cout << "Input out of range. Please enter a valid number." << endl;
+            }
+        }
+        return value;
+    }
+
     void getDonorDetails() {
+        clearConsole();
         cout << "Enter donor details\n";
 
         Donor newDonor;
-        cout << "Id: ";
-        cin >> newDonor.donorId;
-        cout << "\n";
+        newDonor.donorId = getValidatedInput("Id: ");
         cout << "Name: ";
-        cin.ignore();
         getline(cin, newDonor.name);
-        cout << "\n";
         cout << "Address: ";
         getline(cin, newDonor.address);
-        cout << "\n";
-
-        cout << "Province: ";
-        cin >> newDonor.district;
-        cout << "\n";
-        cin.ignore();
+        
+        displayProvinces();
+        newDonor.district = getValidatedInput("Province (enter the corresponding number): ");
         cout << "Blood Type: ";
         getline(cin, newDonor.bloodType);
-        cout << "\n";
-
-        cout << "Number: ";
-        cin >> newDonor.number;
+        newDonor.number = getValidatedInput("Number: ");
 
         donors.push_back(newDonor);
     }
 
     void writeDataToFile() {
-        ofstream outfile(fileName, ios::app); 
+        ofstream outfile(fileName, ios::app);
 
         if (!outfile) {
             cout << "Error opening file for writing." << endl;
             return;
         }
 
-        Donor newDonor = donors.back(); 
-        outfile << newDonor.name << "    " << newDonor.address << "    " << newDonor.district << "    " << newDonor.bloodType << "    " << newDonor.number << "," << endl;
+        Donor newDonor = donors.back();
+        outfile << newDonor.donorId << "," << newDonor.name << "," << newDonor.address << "," << newDonor.district << "," << newDonor.bloodType << "," << newDonor.number << endl;
 
         outfile.close();
     }
 
     void searchAndDisplay() const {
-        int provinceName;
-        cout << "Enter the name of the province: ";
-        cin >> provinceName;
+        clearConsole();
+        displayProvinces();
+        int provinceName = getValidatedInput("Enter the province number: ");
 
         ifstream inFile(fileName);
 
@@ -93,23 +135,23 @@ public:
             return;
         }
 
-        vector<Donor> donor;
-        Donor temp;  //temporary object
+        vector<Donor> donors;
         string line;
         bool found = false;
 
         while (getline(inFile, line)) {
-            Donor d = temp.parseLine(line);
+            Donor d = Donor::parseLine(line);
             if (d.district == provinceName) {
-                donor.push_back(d);
+                donors.push_back(d);
+                found = true;
             }
         }
 
-        if (donor.empty()) {
-            cout << "No people found from " << provinceName << endl;
+        if (!found) {
+            cout << "No people found from province " << provinceName << endl;
         } else {
-            cout << "People from " << provinceName << ":" << endl;
-            for (const auto& d : donor) {
+            cout << "People from province " << provinceName << ":" << endl;
+            for (const auto& d : donors) {
                 cout << "Name: " << d.name << endl;
                 cout << "Address: " << d.address << endl;
                 cout << "Province: " << d.district << endl;
@@ -120,11 +162,12 @@ public:
         }
 
         inFile.close();
+        waitForKeyPress();
     }
 
     void deleteDonor(const string& donorName) {
         ifstream inFile(fileName);
-        ofstream tempFile("temp.txt"); // Temporary file to store non-deleted donors
+        ofstream tempFile("temp.txt");
 
         if (!inFile) {
             cerr << "Error opening file " << fileName << endl;
@@ -136,14 +179,13 @@ public:
             return;
         }
 
-        Donor temp;  //temporary object
         string line;
-        bool found = false; // Flag to check if the donor is found
+        bool found = false;
 
         while (getline(inFile, line)) {
-            Donor d = temp.parseLine(line);
+            Donor d = Donor::parseLine(line);
             if (d.name == donorName) {
-                found = true; // Set found flag to true
+                found = true;
                 cout << "Name: " << d.name << endl;
                 cout << "Address: " << d.address << endl;
                 cout << "Blood Type: " << d.bloodType << endl;
@@ -152,13 +194,14 @@ public:
                 cout << "Are you sure you want to delete donor? [y/n]: ";
                 char sureChoice;
                 cin >> sureChoice;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard any extra input
 
                 if (sureChoice == 'y' || sureChoice == 'Y') {
                     continue;
                 }
             }
 
-            tempFile << line << endl;
+            tempFile << d.donorId << "," << d.name << "," << d.address << "," << d.district << "," << d.bloodType << "," << d.number << endl;
         }
 
         inFile.close();
@@ -185,17 +228,17 @@ int main() {
     BloodDatabase database;
     int choice;
 
-    while (1) {
+    while (true) {
+        BloodDatabase::clearConsole();
         cout <<
-            "  ____  _                 _   ____              _      \n"
+            "  ____  _                 _   ____               _      \n"
             " | __ )| | ___   ___   __| | | __ )  __ _ _ __ | | __  \n"
             " |  _ \\| |/ _ \\ / _ \\ / _` | |  _ \\ / _` | '_ \\| |/ /  \n"
             " | |_) | | (_) | (_) | (_| | | |_) | (_| | | | |   <   \n"
             " |____/|_|\\___/ \\___/ \\__,_| |____/ \\__,_|_| |_|_|\\_\\  \n"
             "                                                      \n\n";
         cout << "1. Register Donor\n2. Find Donor\n3. Delete Donor\n4. Exit\nEnter your choice: ";
-        cin >> choice;
-        cin.ignore(); // This will clear the newline character left in the buffer
+        choice = BloodDatabase::getValidatedInput("");
 
         switch (choice) {
         case 1:
@@ -211,7 +254,7 @@ int main() {
             database.deleteDonor(donorName);
             break;
         case 4:
-            exit(1);
+            exit(0);
         default:
             cout << "Invalid choice\n";
         }
