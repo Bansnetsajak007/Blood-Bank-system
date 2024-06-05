@@ -26,14 +26,21 @@ public:
         stringstream ss(line);
         string token;
 
-        getline(ss, token, ','); d.donorId = stoi(token);
-        getline(ss, token, ','); d.name = token;
-        getline(ss, token, ','); d.address = token;
-        getline(ss, token, ','); d.district = stoi(token);
-        getline(ss, token, ','); d.bloodType = token;
-        getline(ss, token, ','); d.number = stoi(token);
+        getline(ss, token, ','); d.donorId = stoi(trim(token));
+        getline(ss, token, ','); d.name = trim(token);
+        getline(ss, token, ','); d.address = trim(token);
+        getline(ss, token, ','); d.district = stoi(trim(token));
+        getline(ss, token, ','); d.bloodType = trim(token);
+        getline(ss, token, ','); d.number = stoi(trim(token));
 
         return d;
+    }
+
+    static string trim(const string& str) {
+        size_t first = str.find_first_not_of(' ');
+        if (first == string::npos) return "";
+        size_t last = str.find_last_not_of(' ');
+        return str.substr(first, (last - first + 1));
     }
 };
 
@@ -118,7 +125,7 @@ public:
         }
 
         Donor newDonor = donors.back();
-        outfile << newDonor.donorId << "," << newDonor.name << "," << newDonor.address << "," << newDonor.district << "," << newDonor.bloodType << "," << newDonor.number << endl;
+        outfile << newDonor.donorId << ",    " << newDonor.name << ",    " << newDonor.address << ",    " << newDonor.district << ",    " << newDonor.bloodType << ",    " << newDonor.number << endl;
 
         outfile.close();
     }
@@ -227,7 +234,7 @@ public:
                 }
             }
 
-            tempFile << d.donorId << "  ,  " << d.name << "  ,  " << d.address << "  ,  " << d.district << "  ,  " << d.bloodType << "  ,  " << d.number << endl;
+            tempFile << d.donorId << ",    " << d.name << ",    " << d.address << ",    " << d.district << ",    " << d.bloodType << ",    " << d.number << endl;
         }
 
         inFile.close();
@@ -261,10 +268,15 @@ int main() {
             " | __ )| | ___   ___   __| | | __ )  __ _ _ __ | | __  \n"
             " |  _ \\| |/ _ \\ / _ \\ / _` | |  _ \\ / _` | '_ \\| |/ /  \n"
             " | |_) | | (_) | (_) | (_| | | |_) | (_| | | | |   <   \n"
-            " |____/|_|\\___/ \\___/ \\__,_| |____/ \\__,_|_| |_|_|\\_\\  \n"
-            "                                                      \n\n";
-        cout << "1. Register Donor\n2. Find Donor\n3. Delete Donor\n4. Exit\nEnter your choice: ";
-        choice = BloodDatabase::getValidatedInput("");
+            " |____/|_|\\___/ \\___/ \\__,_| |____/ \\__,_|_| |_|_|\\_\\  \n";
+
+        cout << "1. Register Donor\n";
+        cout << "2. Find Donor\n";
+        cout << "3. Delete Donor\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard any extra input
 
         switch (choice) {
         case 1:
@@ -275,15 +287,18 @@ int main() {
             database.searchAndDisplay();
             break;
         case 3:
-            cout << "Enter the Name of Donor: ";
+            cout << "Enter the name of the donor to delete: ";
             getline(cin, donorName);
             database.deleteDonor(donorName);
+            BloodDatabase::waitForKeyPress();
             break;
         case 4:
-            exit(0);
+            cout << "Thank you for using the Blood Donor Database Management System. Goodbye!" << endl;
+            return 0;
         default:
-            cout << "Invalid choice\n";
+            cout << "Invalid choice. Please try again.\n";
+            BloodDatabase::waitForKeyPress();
+            break;
         }
     }
-    return 0;
 }
