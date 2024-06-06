@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Santosh    Kathmandu    1    A+    9801234567
 Santosh    Kathmandu    1    A+    9801234567
 Aashma    Pokhara    3    B-    9802345678
@@ -35,3 +36,6 @@ Asha    Birgunj    4    AB+    9805678901
 Sontosh    Pokhara    3    B+    9870888,
 Sajak    Birtamode    1    B+    98324455,
 Salam    Arjundhara    1    A+    98077878,
+=======
+1111,      kamal das,         sda,         1,          O,            3846
+>>>>>>> ffd981c2312a2a4d4c5d921aa109ee586c00ff91
