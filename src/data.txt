@@ -35,4 +35,3 @@ Asha    Birgunj    4    AB+    9805678901
 Sontosh    Pokhara    3    B+    9870888,
 Sajak    Birtamode    1    B+    98324455,
 Salam    Arjundhara    1    A+    98077878,
-Salmann khan    Arjundhara    1    AB-    2147483647,
