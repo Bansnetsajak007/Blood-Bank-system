@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <limits>
 
-// Member class to encapsulate member details and operations
 class Member {
 private:
     std::string name;
@@ -61,7 +60,6 @@ public:
     }
 };
 
-// GymManagement class to handle member management
 class GymManagement {
 private:
     std::vector<Member> members;
@@ -80,7 +78,7 @@ private:
 
     void loadFromFile() {
         std::ifstream inFile(fileName);
-        if (!inFile) return; // If file does not exist, return
+        if (!inFile) return; // file xaina vane sidai return han (not letting program to crash)
         while (inFile) {
             Member member = Member::loadFromFile(inFile);
             if (inFile) {
@@ -102,7 +100,7 @@ public:
         members.emplace_back(name, age, gender, feePaid, totalDays);
         std::cout << "Member registered successfully.\n";
         
-        // Save the new member to the file immediately
+        // Save the new member to file
         std::ofstream outFile(fileName, std::ios::app);
         members.back().saveToFile(outFile);
     }
@@ -123,7 +121,7 @@ public:
         if (it != members.end()) {
             it->addFee(amount);
             std::cout << "Fee added successfully.\n";
-            saveAllToFile(); // Save all members to file to keep the data consistent
+            saveAllToFile(); // Save all members to file
         } else {
             std::cout << "Member not found.\n";
         }
@@ -134,7 +132,7 @@ public:
         if (it != members.end()) {
             it->addDays(days);
             std::cout << "Days added successfully.\n";
-            saveAllToFile(); // Save all members to file to keep the data consistent
+            saveAllToFile();
         } else {
             std::cout << "Member not found.\n";
         }
@@ -145,7 +143,7 @@ public:
         if (it != members.end()) {
             members.erase(it);
             std::cout << "Member deleted successfully.\n";
-            saveAllToFile(); // Save all members to file to keep the data consistent
+            saveAllToFile();
         } else {
             std::cout << "Member not found.\n";
         }
@@ -165,14 +163,14 @@ public:
         if (it != members.end()) {
             it->updateInfo(newAge, newGender);
             std::cout << "Member information updated successfully.\n";
-            saveAllToFile(); // Save all members to file to keep the data consistent
+            saveAllToFile(); 
         } else {
             std::cout << "Member not found.\n";
         }
     }
 };
 
-// Function to validate positive integer input
+
 int getValidPositiveInt(const std::string& prompt) {
     int value;
     while (true) {
@@ -188,7 +186,7 @@ int getValidPositiveInt(const std::string& prompt) {
     }
 }
 
-// Function to validate positive double input
+
 double getValidPositiveDouble(const std::string& prompt) {
     double value;
     while (true) {
@@ -204,7 +202,7 @@ double getValidPositiveDouble(const std::string& prompt) {
     }
 }
 
-// Function to validate non-empty string input
+
 std::string getValidString(const std::string& prompt) {
     std::string value;
     while (true) {
